@@ -1,6 +1,5 @@
 from datetime import datetime
 import random
-
 class Product():
     def __init__(self, name, price, deal_price,rating):
         self.name = name
@@ -69,12 +68,13 @@ class Order():
             space_for_string = " "* (35 - string_length)
             print(f"{product.name}{space_for_string}{quantity}{space_for_price}{price}{space_for_deal_price}{deal_price}")
         print("-------------------------------------------------------------------------")
-        print("Total Price:",total_price,"+",delivery_charge,"\nDiscounted Price: ",total_deal_price,"\nYou Saved: ",total_price- deal_price)
+        print("Total Price:",total_price,"+",delivery_charge,"\nDiscounted Price: ",total_deal_price,"\nYou Saved: ",total_price- total_deal_price)
         print("-------------------------------------------------------------------------")
         
-        print(f"Final Ammount to Pay: {total_price+delivery_charge}")
+        print(f"Final Ammount to Pay: {total_deal_price + delivery_charge}")
         print("Delivery Speed: {}".format(self.delivery_speed))
         print("Delivery Address: {}".format(self.delivery_address))
+        
         print("Invoice No: ",self.invoice_number)
         print("Date: ",self.invoice_date)
         print("......................Thank You for shopping visit again..................")
