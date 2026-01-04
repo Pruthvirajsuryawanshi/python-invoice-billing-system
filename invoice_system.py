@@ -71,7 +71,7 @@ class Order():
         print("Total Price:",total_price,"+",delivery_charge,"\nDiscounted Price: ",total_deal_price,"\nYou Saved: ",total_price- total_deal_price)
         print("-------------------------------------------------------------------------")
         
-        print(f"Final Ammount to Pay: {total_deal_price + delivery_charge}")
+        print(f"Final Amount to Pay: {total_deal_price + delivery_charge}")
         print("Delivery Speed: {}".format(self.delivery_speed))
         print("Delivery Address: {}".format(self.delivery_address))
         
