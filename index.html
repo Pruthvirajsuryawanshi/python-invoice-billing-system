@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice & Billing System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Invoice & Billing System</h1>
+            <p>Python OOP E-commerce Checkout Simulation</p>
+        </header>
+
+        <div class="invoice-container">
+            <div class="invoice-header">
+                <h2>INVOICE</h2>
+                <div class="invoice-info">
+                    <p><strong>Invoice No:</strong> <span id="invoice-number">------</span></p>
+                    <p><strong>Date:</strong> <span id="invoice-date">------</span></p>
+                </div>
+            </div>
+
+            <div class="customer-info">
+                <h3>Delivery Information</h3>
+                <p><strong>Delivery Speed:</strong> <span id="delivery-speed">------</span></p>
+                <p><strong>Delivery Address:</strong> <span id="delivery-address">------</span></p>
+            </div>
+
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Deal Price</th>
+                    </tr>
+                </thead>
+                <tbody id="invoice-items">
+                    <!-- Items will be populated by JS -->
+                </tbody>
+            </table>
+
+            <div class="invoice-summary">
+                <div class="summary-row">
+                    <span>Total Price:</span>
+                    <span id="total-price">₹0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Delivery Charge:</span>
+                    <span id="delivery-charge">₹0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Discounted Price:</span>
+                    <span id="discounted-price">₹0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>You Saved:</span>
+                    <span id="you-saved">₹0.00</span>
+                </div>
+                <div class="summary-row final-amount">
+                    <span>Final Amount to Pay:</span>
+                    <span id="final-amount">₹0.00</span>
+                </div>
+            </div>
+
+            <div class="thank-you">
+                <p>Thank You for shopping! Visit again...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
