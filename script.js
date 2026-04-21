@@ -234,6 +234,9 @@ function renderCart() {
     const cartContainer = document.getElementById('cart-items');
     const emptyMessage = document.getElementById('empty-cart-message');
     const cartCount = document.getElementById('cart-count');
+    const cartSummary = document.getElementById('cart-summary');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const cartTotalAmount = document.getElementById('cart-total-amount');
 
     cartContainer.innerHTML = '';
 
@@ -241,13 +244,17 @@ function renderCart() {
     const itemCount = order.getCartItemCount();
     cartCount.textContent = itemCount;
 
-    // Show/hide empty cart message
+    // Show/hide empty cart message and cart summary
     if (order.isCartEmpty()) {
         emptyMessage.style.display = 'block';
         cartContainer.style.display = 'none';
+        cartSummary.style.display = 'none';
+        checkoutBtn.disabled = true;
     } else {
         emptyMessage.style.display = 'none';
         cartContainer.style.display = 'block';
+        cartSummary.style.display = 'block';
+        checkoutBtn.disabled = false;
 
         // Render each cart item
         order.itemsInCart.forEach(({ product, quantity }) => {
@@ -271,6 +278,10 @@ function renderCart() {
 
             cartContainer.appendChild(cartItem);
         });
+
+        // Update cart total
+        const totals = order.calculateTotals();
+        cartTotalAmount.textContent = `₹${totals.finalAmount.toLocaleString()}`;
     }
 
     // Update invoice if cart is not empty
@@ -304,8 +315,50 @@ function updateDeliverySpeed() {
     const newSpeed = selectElement.value;
     order.deliverySpeed = newSpeed;
     
-    // Re-render invoice with new delivery charge
-    populateInvoice();
+    // Re-render cart and invoice with new delivery charge
+    renderCart();
+}
+
+// Checkout function
+function checkout() {
+    if (order.isCartEmpty()) {
+        alert('Your cart is empty!');
+        return;
+    }
+
+    // Show success message
+    const successMessage = document.getElementById('checkout-success');
+    successMessage.style.display = 'block';
+
+    // Scroll to success message
+    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Hide other sections
+    document.querySelector('.products-section').style.display = 'none';
+    document.querySelector('.cart-section').style.display = 'none';
+    document.querySelector('.invoice-container').style.display = 'none';
+}
+
+// Continue shopping function
+function continueShopping() {
+    // Hide success message
+    const successMessage = document.getElementById('checkout-success');
+    successMessage.style.display = 'none';
+
+    // Clear cart
+    order.itemsInCart = [];
+    
+    // Generate new invoice number and date for next order
+    order.invoiceNumber = Math.floor(Math.random() * 900000) + 100000;
+    order.invoiceDate = new Date();
+
+    // Show all sections again
+    document.querySelector('.products-section').style.display = 'block';
+    document.querySelector('.cart-section').style.display = 'block';
+    document.querySelector('.invoice-container').style.display = 'block';
+
+    // Re-render cart (will be empty)
+    renderCart();
 }
 
 // Function to populate the invoice UI

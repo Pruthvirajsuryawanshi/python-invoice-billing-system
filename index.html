@@ -28,6 +28,15 @@
             <div id="empty-cart-message" class="empty-cart-message">
                 <p>Your cart is empty. Add some products!</p>
             </div>
+            <div id="cart-summary" class="cart-summary">
+                <div class="cart-total">
+                    <span>Cart Total:</span>
+                    <span id="cart-total-amount">₹0</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn" onclick="checkout()" disabled>
+                    💳 Proceed to Checkout
+                </button>
+            </div>
         </div>
 
         <div class="invoice-container">
@@ -90,6 +99,17 @@
 
             <div class="thank-you">
                 <p>Thank You for shopping! Visit again...</p>
+            </div>
+        </div>
+
+        <div id="checkout-success" class="checkout-success" style="display: none;">
+            <div class="success-message">
+                <div class="success-icon">✓</div>
+                <h2>Order Placed Successfully!</h2>
+                <p>Your invoice has been generated.</p>
+                <button class="continue-shopping-btn" onclick="continueShopping()">
+                    Continue Shopping
+                </button>
             </div>
         </div>
     </div>
