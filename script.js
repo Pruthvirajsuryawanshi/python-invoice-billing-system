@@ -304,13 +304,14 @@ function populateInvoice() {
     const orderDetails = order.displayOrderDetails();
 
     // Set invoice details
-    document.getElementById('invoice-number').textContent = invoiceNumber;
-    document.getElementById('invoice-date').textContent = invoiceDate;
+    document.getElementById('invoice-number').textContent = orderDetails.invoiceNumber;
+    document.getElementById('invoice-date').textContent = orderDetails.invoiceDate;
     document.getElementById('delivery-speed').textContent = orderDetails.deliverySpeed;
     document.getElementById('delivery-address').textContent = orderDetails.deliveryAddress;
 
     // Populate invoice items
     const itemsContainer = document.getElementById('invoice-items');
+    itemsContainer.innerHTML = '';
 
     orderDetails.items.forEach(({ product, quantity }) => {
         const row = document.createElement('tr');
@@ -320,19 +321,20 @@ function populateInvoice() {
         row.innerHTML = `
             <td>${product.name}</td>
             <td>${quantity}</td>
-            <td>₹${itemTotal.toLocaleString()}</td>
-            <td>₹${itemDealTotal.toLocaleString()}</td>
+            <td>₹${itemTotal}</td>
+            <td>₹${itemDealTotal}</td>
         `;
         
         itemsContainer.appendChild(row);
     });
 
-    // Set summary values
-    document.getElementById('total-price').textContent = `₹${orderDetails.totalPrice.toLocaleString()}`;
+    // Set summary values - matching Python format exactly
+    // Python: "Total Price:",total_price,"+",delivery_charge,"\nDiscounted Price: ",total_deal_price,"\nYou Saved: ",total_price- total_deal_price
+    document.getElementById('total-price').textContent = `₹${orderDetails.totalPrice} + ₹${orderDetails.deliveryCharge}`;
+    document.getElementById('discounted-price').textContent = `₹${orderDetails.totalDealPrice}`;
+    document.getElementById('you-saved').textContent = `₹${orderDetails.youSaved}`;
     document.getElementById('delivery-charge').textContent = `₹${orderDetails.deliveryCharge}`;
-    document.getElementById('discounted-price').textContent = `₹${orderDetails.totalDealPrice.toLocaleString()}`;
-    document.getElementById('you-saved').textContent = `₹${orderDetails.youSaved.toLocaleString()}`;
-    document.getElementById('final-amount').textContent = `₹${orderDetails.finalAmount.toLocaleString()}`;
+    document.getElementById('final-amount').textContent = `₹${orderDetails.finalAmount}`;
 }
 
 // Initialize the invoice when page loads
