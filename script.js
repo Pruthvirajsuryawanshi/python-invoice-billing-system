@@ -58,32 +58,79 @@ class Order {
         this.itemsInCart = [];
         this.deliverySpeed = deliverySpeed;
         this.deliveryAddress = deliveryAddress;
+        this.invoiceNumber = Math.floor(Math.random() * 900000) + 100000;
+        this.invoiceDate = new Date();
     }
 
     addItem(product, quantity) {
-        this.itemsInCart.push({ product, quantity });
+        // Check if product already exists in cart
+        const existingItem = this.itemsInCart.find(item => item.product.name === product.name);
+        
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            this.itemsInCart.push({ product, quantity });
+        }
     }
 
-    displayOrderDetails() {
+    removeItem(productName) {
+        this.itemsInCart = this.itemsInCart.filter(item => item.product.name !== productName);
+    }
+
+    updateQuantity(productName, newQuantity) {
+        const item = this.itemsInCart.find(item => item.product.name === productName);
+        if (item) {
+            if (newQuantity <= 0) {
+                this.removeItem(productName);
+            } else {
+                item.quantity = newQuantity;
+            }
+        }
+    }
+
+    calculateTotals() {
         let totalPrice = 0;
         let totalDealPrice = 0;
-        const deliveryCharge = Order.deliveryCharges[this.deliverySpeed];
 
         this.itemsInCart.forEach(({ product, quantity }) => {
             totalPrice += product.price * quantity;
             totalDealPrice += product.dealPrice * quantity;
         });
 
+        const deliveryCharge = Order.deliveryCharges[this.deliverySpeed];
+        const youSaved = totalPrice - totalDealPrice;
+        const finalAmount = totalDealPrice + deliveryCharge;
+
         return {
-            items: this.itemsInCart,
             totalPrice,
             totalDealPrice,
             deliveryCharge,
-            youSaved: totalPrice - totalDealPrice,
-            finalAmount: totalDealPrice + deliveryCharge,
-            deliverySpeed: this.deliverySpeed,
-            deliveryAddress: this.deliveryAddress
+            youSaved,
+            finalAmount
         };
+    }
+
+    displayOrderDetails() {
+        const totals = this.calculateTotals();
+        
+        return {
+            items: this.itemsInCart,
+            ...totals,
+            deliverySpeed: this.deliverySpeed,
+            deliveryAddress: this.deliveryAddress,
+            invoiceNumber: this.invoiceNumber,
+            invoiceDate: this.invoiceDate.getDate().toString().padStart(2, '0') + '-' + 
+                        (this.invoiceDate.getMonth() + 1).toString().padStart(2, '0') + '-' + 
+                        this.invoiceDate.getFullYear()
+        };
+    }
+
+    getCartItemCount() {
+        return this.itemsInCart.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    isCartEmpty() {
+        return this.itemsInCart.length === 0;
     }
 }
 
@@ -97,6 +144,7 @@ const flour = new GroceryItems("1 KG TATA Wheat", 400, 350, 4.2, "01/02/2026");
 const products = [mobile, TV, mouse, flour];
 
 const order = new Order("non prime member", "Jintur");
+// Pre-add items to cart (matching Python backend)
 order.addItem(TV, 2);
 order.addItem(mobile, 2);
 order.addItem(mouse, 1);
@@ -171,11 +219,83 @@ function renderProductCards() {
         cardHTML += `
             </div>
             <span class="product-badge ${badgeClass}">${badgeText}</span>
+            <button class="add-to-cart-btn" onclick="addToCart('${product.name}')">
+                🛒 Add to Cart
+            </button>
         `;
 
         card.innerHTML = cardHTML;
         cardsContainer.appendChild(card);
     });
+}
+
+// Function to render cart items
+function renderCart() {
+    const cartContainer = document.getElementById('cart-items');
+    const emptyMessage = document.getElementById('empty-cart-message');
+    const cartCount = document.getElementById('cart-count');
+
+    cartContainer.innerHTML = '';
+
+    // Update cart count
+    const itemCount = order.getCartItemCount();
+    cartCount.textContent = itemCount;
+
+    // Show/hide empty cart message
+    if (order.isCartEmpty()) {
+        emptyMessage.style.display = 'block';
+        cartContainer.style.display = 'none';
+    } else {
+        emptyMessage.style.display = 'none';
+        cartContainer.style.display = 'block';
+
+        // Render each cart item
+        order.itemsInCart.forEach(({ product, quantity }) => {
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item';
+
+            const itemTotal = product.dealPrice * quantity;
+
+            cartItem.innerHTML = `
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${product.name}</div>
+                    <div class="cart-item-price">₹${product.dealPrice.toLocaleString()} × ${quantity} = ₹${itemTotal.toLocaleString()}</div>
+                </div>
+                <div class="cart-item-controls">
+                    <button class="quantity-btn" onclick="updateQuantity('${product.name}', ${quantity - 1})">−</button>
+                    <span class="quantity-display">${quantity}</span>
+                    <button class="quantity-btn" onclick="updateQuantity('${product.name}', ${quantity + 1})">+</button>
+                    <button class="remove-btn" onclick="removeFromCart('${product.name}')">Remove</button>
+                </div>
+            `;
+
+            cartContainer.appendChild(cartItem);
+        });
+    }
+
+    // Update invoice if cart is not empty
+    if (!order.isCartEmpty()) {
+        populateInvoice();
+    }
+}
+
+// Cart management functions
+function addToCart(productName) {
+    const product = products.find(p => p.name === productName);
+    if (product) {
+        order.addItem(product, 1);
+        renderCart();
+    }
+}
+
+function removeFromCart(productName) {
+    order.removeItem(productName);
+    renderCart();
+}
+
+function updateQuantity(productName, newQuantity) {
+    order.updateQuantity(productName, newQuantity);
+    renderCart();
 }
 
 // Function to populate the invoice UI
@@ -218,5 +338,5 @@ function populateInvoice() {
 // Initialize the invoice when page loads
 document.addEventListener('DOMContentLoaded', () => {
     renderProductCards();
-    populateInvoice();
+    renderCart();
 });
