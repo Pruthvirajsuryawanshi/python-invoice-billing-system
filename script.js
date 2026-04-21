@@ -93,6 +93,9 @@ const TV = new ElectronicItem("Samsung TV", 40000, 38000, 4.5, "Google Assistanc
 const mouse = new ElectronicItem("Ideapad Mouse", 2000, 1600, 3.9, "RGB", 6);
 const flour = new GroceryItems("1 KG TATA Wheat", 400, 350, 4.2, "01/02/2026");
 
+// Product data array
+const products = [mobile, TV, mouse, flour];
+
 const order = new Order("non prime member", "Jintur");
 order.addItem(TV, 2);
 order.addItem(mobile, 2);
@@ -105,6 +108,75 @@ const today = new Date();
 const invoiceDate = today.getDate().toString().padStart(2, '0') + '-' + 
                     (today.getMonth() + 1).toString().padStart(2, '0') + '-' + 
                     today.getFullYear();
+
+// Function to render product cards
+function renderProductCards() {
+    const cardsContainer = document.getElementById('product-cards');
+    cardsContainer.innerHTML = '';
+
+    products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        // Determine product type
+        const isElectronic = product instanceof ElectronicItem;
+        const isGrocery = product instanceof GroceryItems;
+        const badgeClass = isElectronic ? 'badge-electronic' : 'badge-grocery';
+        const badgeText = isElectronic ? '🔌 Electronic' : '🛒 Grocery';
+
+        // Build card HTML
+        let cardHTML = `
+            <div class="product-card-header">
+                <h3 class="product-name">${product.name}</h3>
+                <span class="product-rating">⭐ ${product.rating}</span>
+            </div>
+            <div class="product-details">
+                <div class="product-detail-row">
+                    <span class="detail-label">Original Price:</span>
+                    <span class="detail-value price">₹${product.price.toLocaleString()}</span>
+                </div>
+                <div class="product-detail-row">
+                    <span class="detail-label">Deal Price:</span>
+                    <span class="detail-value deal-price">₹${product.dealPrice.toLocaleString()}</span>
+                </div>
+                <div class="product-detail-row">
+                    <span class="detail-label">You Save:</span>
+                    <span class="detail-value savings">₹${product.youSave.toLocaleString()}</span>
+                </div>
+        `;
+
+        // Add type-specific details
+        if (isElectronic) {
+            cardHTML += `
+                <div class="product-detail-row">
+                    <span class="detail-label">Features:</span>
+                    <span class="detail-value">${product.extraFeatures}</span>
+                </div>
+                <div class="product-detail-row">
+                    <span class="detail-label">Warranty:</span>
+                    <span class="detail-value">${product.warrantyInMonths} Months</span>
+                </div>
+            `;
+        }
+
+        if (isGrocery) {
+            cardHTML += `
+                <div class="product-detail-row">
+                    <span class="detail-label">Expiry Date:</span>
+                    <span class="detail-value">${product.expiryDate}</span>
+                </div>
+            `;
+        }
+
+        cardHTML += `
+            </div>
+            <span class="product-badge ${badgeClass}">${badgeText}</span>
+        `;
+
+        card.innerHTML = cardHTML;
+        cardsContainer.appendChild(card);
+    });
+}
 
 // Function to populate the invoice UI
 function populateInvoice() {
@@ -144,4 +216,7 @@ function populateInvoice() {
 }
 
 // Initialize the invoice when page loads
-document.addEventListener('DOMContentLoaded', populateInvoice);
+document.addEventListener('DOMContentLoaded', () => {
+    renderProductCards();
+    populateInvoice();
+});

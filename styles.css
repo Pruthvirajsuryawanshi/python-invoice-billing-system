@@ -37,6 +37,126 @@ body {
     opacity: 0.9;
 }
 
+.products-section {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 2rem;
+    color: #4a5568;
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 10px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.product-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 4px solid #667eea;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+}
+
+.product-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.product-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #2d3748;
+    margin: 0;
+}
+
+.product-rating {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.product-details {
+    margin: 10px 0;
+}
+
+.product-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.product-detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: #718096;
+    font-weight: 500;
+}
+
+.detail-value {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.detail-value.price {
+    color: #e53e3e;
+    text-decoration: line-through;
+}
+
+.detail-value.deal-price {
+    color: #38a169;
+    font-size: 1.1rem;
+}
+
+.detail-value.savings {
+    color: #3182ce;
+    font-weight: bold;
+}
+
+.product-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.badge-electronic {
+    background-color: #bee3f8;
+    color: #2c5282;
+}
+
+.badge-grocery {
+    background-color: #c6f6d5;
+    color: #276749;
+}
+
 .invoice-container {
     background: white;
     border-radius: 10px;
