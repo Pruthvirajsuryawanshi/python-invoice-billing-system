@@ -41,7 +41,13 @@
 
             <div class="customer-info">
                 <h3>Delivery Information</h3>
-                <p><strong>Delivery Speed:</strong> <span id="delivery-speed">------</span></p>
+                <div class="delivery-speed-selector">
+                    <label for="delivery-speed-select"><strong>Delivery Speed:</strong></label>
+                    <select id="delivery-speed-select" onchange="updateDeliverySpeed()">
+                        <option value="non prime member">Non-Prime Member (₹50)</option>
+                        <option value="prime member">Prime Member (₹0)</option>
+                    </select>
+                </div>
                 <p><strong>Delivery Address:</strong> <span id="delivery-address">------</span></p>
             </div>
 

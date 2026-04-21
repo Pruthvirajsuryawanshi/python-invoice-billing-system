@@ -298,6 +298,16 @@ function updateQuantity(productName, newQuantity) {
     renderCart();
 }
 
+// Delivery speed update function
+function updateDeliverySpeed() {
+    const selectElement = document.getElementById('delivery-speed-select');
+    const newSpeed = selectElement.value;
+    order.deliverySpeed = newSpeed;
+    
+    // Re-render invoice with new delivery charge
+    populateInvoice();
+}
+
 // Function to populate the invoice UI
 function populateInvoice() {
     // Get order details from Order object
@@ -306,8 +316,10 @@ function populateInvoice() {
     // Set invoice details
     document.getElementById('invoice-number').textContent = orderDetails.invoiceNumber;
     document.getElementById('invoice-date').textContent = orderDetails.invoiceDate;
-    document.getElementById('delivery-speed').textContent = orderDetails.deliverySpeed;
     document.getElementById('delivery-address').textContent = orderDetails.deliveryAddress;
+
+    // Update delivery speed selector to match current order
+    document.getElementById('delivery-speed-select').value = order.deliverySpeed;
 
     // Populate invoice items
     const itemsContainer = document.getElementById('invoice-items');
@@ -335,6 +347,16 @@ function populateInvoice() {
     document.getElementById('you-saved').textContent = `₹${orderDetails.youSaved}`;
     document.getElementById('delivery-charge').textContent = `₹${orderDetails.deliveryCharge}`;
     document.getElementById('final-amount').textContent = `₹${orderDetails.finalAmount}`;
+    
+    // Highlight delivery charge based on membership
+    const deliveryChargeElement = document.getElementById('delivery-charge');
+    if (orderDetails.deliveryCharge === 0) {
+        deliveryChargeElement.style.color = '#38a169';
+        deliveryChargeElement.style.fontWeight = 'bold';
+    } else {
+        deliveryChargeElement.style.color = '#2d3748';
+        deliveryChargeElement.style.fontWeight = 'normal';
+    }
 }
 
 // Initialize the invoice when page loads

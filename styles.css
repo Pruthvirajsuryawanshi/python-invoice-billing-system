@@ -327,6 +327,39 @@ body {
     color: #555;
 }
 
+.delivery-speed-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.delivery-speed-selector label {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+#delivery-speed-select {
+    padding: 8px 12px;
+    border: 2px solid #667eea;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #2d3748;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#delivery-speed-select:hover {
+    border-color: #764ba2;
+}
+
+#delivery-speed-select:focus {
+    outline: none;
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
 .invoice-table {
     width: 100%;
     border-collapse: collapse;
