@@ -144,11 +144,7 @@ const flour = new GroceryItems("1 KG TATA Wheat", 400, 350, 4.2, "01/02/2026");
 const products = [mobile, TV, mouse, flour];
 
 const order = new Order("non prime member", "Jintur");
-// Pre-add items to cart (matching Python backend)
-order.addItem(TV, 2);
-order.addItem(mobile, 2);
-order.addItem(mouse, 1);
-order.addItem(flour, 1);
+// Cart starts empty - add items using the UI
 
 // Generate random invoice number and current date (matching Python)
 const invoiceNumber = Math.floor(Math.random() * 900000) + 100000;
