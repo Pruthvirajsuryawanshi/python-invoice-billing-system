@@ -561,6 +561,33 @@ body {
     font-weight: 500;
 }
 
+.invoice-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.download-btn {
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(56, 161, 105, 0.3);
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 161, 105, 0.4);
+}
+
+.download-btn:active {
+    transform: translateY(0);
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 15px;

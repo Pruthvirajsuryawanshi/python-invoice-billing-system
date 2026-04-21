@@ -361,6 +361,198 @@ function continueShopping() {
     renderCart();
 }
 
+// Download invoice as PDF
+function downloadInvoice() {
+    if (order.isCartEmpty()) {
+        alert('Cannot download empty invoice!');
+        return;
+    }
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    
+    // Get order details
+    const orderDetails = order.displayOrderDetails();
+    
+    // Generate invoice HTML
+    const invoiceHTML = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Invoice ${orderDetails.invoiceNumber}</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: Arial, sans-serif;
+                padding: 40px;
+                background: white;
+            }
+            .invoice-header {
+                text-align: center;
+                border-bottom: 3px solid #333;
+                padding-bottom: 20px;
+                margin-bottom: 30px;
+            }
+            .invoice-header h1 {
+                font-size: 2.5rem;
+                color: #333;
+                margin-bottom: 10px;
+            }
+            .invoice-info {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+                padding: 15px;
+                background: #f5f5f5;
+                border-radius: 5px;
+            }
+            .invoice-info p {
+                margin: 5px 0;
+                font-size: 1rem;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+            th {
+                background: #333;
+                color: white;
+                padding: 12px;
+                text-align: left;
+            }
+            td {
+                padding: 12px;
+                border-bottom: 1px solid #ddd;
+            }
+            tr:nth-child(even) {
+                background: #f9f9f9;
+            }
+            .summary {
+                margin-top: 20px;
+                padding: 20px;
+                background: #f5f5f5;
+                border-radius: 5px;
+                border: 2px solid #333;
+            }
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 1px dashed #ccc;
+                font-size: 1.1rem;
+            }
+            .summary-row:last-child {
+                border-bottom: none;
+            }
+            .final-amount {
+                font-size: 1.4rem;
+                font-weight: bold;
+                border-top: 3px double #333;
+                padding-top: 15px;
+                margin-top: 10px;
+            }
+            .thank-you {
+                text-align: center;
+                margin-top: 30px;
+                padding: 20px;
+                background: #333;
+                color: white;
+                border-radius: 5px;
+                font-size: 1.1rem;
+            }
+            @media print {
+                body {
+                    padding: 20px;
+                }
+                @page {
+                    margin: 1cm;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="invoice-header">
+            <h1>INVOICE</h1>
+        </div>
+        
+        <div class="invoice-info">
+            <div>
+                <p><strong>Invoice No:</strong> ${orderDetails.invoiceNumber}</p>
+                <p><strong>Date:</strong> ${orderDetails.invoiceDate}</p>
+            </div>
+            <div>
+                <p><strong>Delivery Speed:</strong> ${orderDetails.deliverySpeed}</p>
+                <p><strong>Delivery Address:</strong> ${orderDetails.deliveryAddress}</p>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Deal Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${orderDetails.items.map(({ product, quantity }) => `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${quantity}</td>
+                        <td>₹${product.price * quantity}</td>
+                        <td>₹${product.dealPrice * quantity}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+
+        <div class="summary">
+            <div class="summary-row">
+                <span>Total Price:</span>
+                <span>₹${orderDetails.totalPrice} + ₹${orderDetails.deliveryCharge}</span>
+            </div>
+            <div class="summary-row">
+                <span>Discounted Price:</span>
+                <span>₹${orderDetails.totalDealPrice}</span>
+            </div>
+            <div class="summary-row">
+                <span>You Saved:</span>
+                <span>₹${orderDetails.youSaved}</span>
+            </div>
+            <div class="summary-row">
+                <span>Delivery Charge:</span>
+                <span>₹${orderDetails.deliveryCharge}</span>
+            </div>
+            <div class="summary-row final-amount">
+                <span>Final Amount to Pay:</span>
+                <span>₹${orderDetails.finalAmount}</span>
+            </div>
+        </div>
+
+        <div class="thank-you">
+            <p>Thank You for shopping! Visit again...</p>
+        </div>
+
+        <script>
+            window.onload = function() {
+                window.print();
+            }
+        <\/script>
+    </body>
+    </html>
+    `;
+
+    // Write to new window and trigger print
+    printWindow.document.write(invoiceHTML);
+    printWindow.document.close();
+}
+
 // Function to populate the invoice UI
 function populateInvoice() {
     // Get order details from Order object
